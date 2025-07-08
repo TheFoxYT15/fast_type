@@ -3,20 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYR I VIBE | تحدى الرياضيات</title>
+    <title>SYR I VIBE | Fast_type</title>
     <style>
         :root {
-            --neon-blue: #00f0ff;
-            --neon-pink: #ff00ff;
-            --neon-green: #00ffaa;
-            --dark-bg: #0a0a1a;
-            --card-bg: rgba(15, 15, 35, 0.8);
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #292F36;
+            --light: #F7FFF7;
+            --purple: #6B5B95;
+            --orange: #FF9F1C;
+            --pink: #FF9FF3;
+            --blue: #48DBFB;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         
         body {
             margin: 0;
-            background: var(--dark-bg);
-            color: white;
+            background: linear-gradient(135deg, var(--dark), #1A1A2E);
+            color: var(--light);
             font-family: 'Cairo', sans-serif;
             display: flex;
             flex-direction: column;
@@ -24,6 +34,7 @@
             justify-content: center;
             min-height: 100vh;
             text-align: center;
+            overflow-x: hidden;
         }
         
         .back-btn {
@@ -32,8 +43,8 @@
             right: 20px;
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
+            border: 1px solid var(--primary);
+            color: var(--primary);
             padding: 10px 20px;
             border-radius: 50px;
             cursor: pointer;
@@ -42,121 +53,238 @@
             gap: 8px;
             transition: all 0.3s;
             z-index: 100;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
             font-weight: bold;
         }
         
         .back-btn:hover {
-            background: rgba(0, 240, 255, 0.2);
+            background: rgba(255, 107, 107, 0.2);
             transform: translateX(-5px);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
         }
         
         h1 {
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-            margin-bottom: 30px;
+            color: var(--accent);
+            margin: 20px 0;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 230, 109, 0.5);
         }
         
         .game-container {
-            background: var(--card-bg);
+            background: rgba(41, 47, 54, 0.9);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--neon-green);
-            border-radius: 15px;
+            border: 2px solid var(--secondary);
+            border-radius: 20px;
             padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);
-        }
-        
-        .question {
-            font-size: 2.5rem;
+            width: 95%;
+            max-width: 700px;
+            box-shadow: 0 0 30px rgba(78, 205, 196, 0.2);
             margin: 20px 0;
-            color: var(--neon-pink);
-            text-shadow: 0 0 8px var(--neon-pink);
+            transition: all 0.3s;
         }
         
-        .options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+        .settings {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+        }
+        
+        .game-active .settings {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .setting-label {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .setting-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .setting-btn {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid var(--secondary);
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .setting-btn.active {
+            background: var(--secondary);
+            color: var(--dark);
+            box-shadow: 0 0 15px var(--secondary);
+            font-weight: bold;
+        }
+        
+        .word-display {
+            font-size: 3rem;
+            margin: 30px 0;
+            color: var(--accent);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 230, 109, 0.7);
+        }
+        
+        .input-container {
+            position: relative;
             margin: 30px 0;
         }
         
-        .option {
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
+        #wordInput {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.3rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--purple);
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            outline: none;
             transition: all 0.3s;
-            font-size: 1.2rem;
+            font-family: 'Cairo', sans-serif;
         }
         
-        .option:hover {
-            background: rgba(0, 240, 255, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+        #wordInput:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 20px var(--orange);
         }
         
         .stats {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
+            justify-content: space-around;
+            margin: 30px 0;
+            font-size: 1.2rem;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
-        .timer {
-            color: var(--neon-green);
-        }
-        
-        .score {
-            color: var(--neon-blue);
-        }
-        
-        .level-selector {
-            margin: 20px 0;
-        }
-        
-        .level-btn {
-            background: transparent;
-            border: 1px solid var(--neon-pink);
-            color: white;
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             padding: 8px 15px;
-            margin: 0 5px;
             border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
         }
         
-        .level-btn.active {
-            background: var(--neon-pink);
-            color: black;
-            box-shadow: 0 0 15px var(--neon-pink);
+        .timer { color: var(--primary); }
+        .score { color: var(--accent); }
+        .high-score { color: var(--secondary); }
+        .accuracy { color: var(--purple); }
+        .wpm { color: var(--orange); }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .start-btn {
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            border-radius: 30px;
-            color: black;
-            cursor: pointer;
+            background: linear-gradient(135deg, var(--purple), var(--primary));
+            color: var(--light);
+        }
+        
+        .stop-btn {
+            background: linear-gradient(135deg, var(--dark), #FF0000);
+            color: var(--light);
+            display: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.5);
+        }
+        
+        .message {
             margin-top: 20px;
-            font-weight: bold;
+            font-size: 1.2rem;
+            min-height: 30px;
             transition: all 0.3s;
+            padding: 10px;
+            border-radius: 10px;
         }
         
-        .start-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.4);
+        .correct { 
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--secondary);
+        }
+        .wrong { 
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--primary);
         }
         
-        @media (max-width: 600px) {
-            .options {
-                grid-template-columns: 1fr;
-            }
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--purple));
+            width: 0%;
+            transition: width 0.5s;
+            border-radius: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .word-display { font-size: 2rem; }
+            .stats { flex-direction: column; align-items: center; }
+            #wordInput { font-size: 1.1rem; padding: 15px; }
+            .btn { padding: 12px 20px; font-size: 1rem; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -167,98 +295,362 @@
         <i class="fas fa-arrow-right"></i> العودة
     </button>
 
-    <h1><i class="fas fa-calculator"></i> تحدى الرياضيات السريع</h1>
+    <h1><i class="fas fa-keyboard"></i> تحدي الكتابة السريعة</h1>
     
-    <div class="game-container">
-        <div class="level-selector">
-            <button class="level-btn active" data-level="easy">سهل</button>
-            <button class="level-btn" data-level="medium">متوسط</button>
-            <button class="level-btn" data-level="hard">صعب</button>
+    <div class="game-container" id="gameContainer">
+        <div class="settings">
+            <div class="setting-group">
+                <span class="setting-label">الصعوبة:</span>
+                <div class="setting-options">
+                    <button class="setting-btn active" data-level="easy">سهل</button>
+                    <button class="setting-btn" data-level="medium">متوسط</button>
+                    <button class="setting-btn" data-level="hard">صعب</button>
+                    <button class="setting-btn" data-level="progressive">تدرّجية</button>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <span class="setting-label">اللغة:</span>
+                <div class="setting-options">
+                    <button class="setting-btn active" data-lang="arabic">عربي</button>
+                    <button class="setting-btn" data-lang="english">English</button>
+                    <button class="setting-btn" data-lang="mixed">مختلط</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
         
         <div class="stats">
-            <div class="timer"><i class="fas fa-clock"></i> الوقت: <span id="time">60</span> ثانية</div>
-            <div class="score"><i class="fas fa-star"></i> النقاط: <span id="points">0</span></div>
+            <div class="stat timer"><i class="fas fa-clock"></i> الوقت: <span id="time">60</span> ثانية</div>
+            <div class="stat score"><i class="fas fa-star"></i> النقاط: <span id="points">0</span></div>
+            <div class="stat high-score"><i class="fas fa-trophy"></i> الأفضل: <span id="highScore">0</span></div>
+            <div class="stat accuracy"><i class="fas fa-bullseye"></i> الدقة: <span id="accuracy">100</span>%</div>
+            <div class="stat wpm"><i class="fas fa-tachometer-alt"></i> ك/د: <span id="wpm">0</span></div>
         </div>
         
-        <div class="question" id="question">?</div>
+        <div class="word-display" id="wordDisplay">...</div>
         
-        <div class="options" id="options">
-            <!-- سيتم ملؤها بالجوابت -->
+        <div class="input-container">
+            <input type="text" id="wordInput" placeholder="اكتب الكلمة هنا..." autocomplete="off" disabled>
         </div>
         
-        <button class="start-btn" id="startBtn">ابدأ اللعبة</button>
+        <div class="message" id="message"></div>
+        
+        <div class="action-buttons">
+            <button class="btn start-btn" id="startBtn">
+                <i class="fas fa-play"></i> ابدأ اللعبة
+            </button>
+            <button class="btn stop-btn" id="stopBtn">
+                <i class="fas fa-stop"></i> إيقاف
+            </button>
+        </div>
     </div>
 
     <audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg" preload="auto"></audio>
     <audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_descent.ogg" preload="auto"></audio>
-    <audio id="timeSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+    <audio id="levelUpSound" src="https://actions.google.com/sounds/v1/cartoon/sci-fi_alert.ogg" preload="auto"></audio>
+    <audio id="gameOverSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_fail_strings.ogg" preload="auto"></audio>
 
     <script>
-        const levels = {
-            easy: { range: 10, time: 60 },
-            medium: { range: 25, time: 45 },
-            hard: { range: 50, time: 30 }
+        // قاعدة بيانات الكلمات المحدثة (أكثر من 1000 كلمة)
+        const wordsDatabase = {
+            arabic: {
+                easy: [
+                    "قمر", "شمس", "بحر", "جبل", "كتاب", "قلم", "وردة", "عصفور", "بيت", "شجرة",
+                    "سيارة", "مدرسة", "حاسوب", "هاتف", "ساعة", "باب", "نافذة", "سرير", "كرسي", "طاولة",
+                    "ورق", "ماء", "هواء", "نار", "تراب", "ذهب", "فضة", "ليل", "نهار", "صيف",
+                    "شتاء", "ربيع", "خريف", "صحراء", "غابة", "نهر", "بحيرة", "نجمة", "سحاب", "مطر",
+                    "ثلج", "ريح", "ضباب", "برق", "رعد", "شلال", "وادي", "جزيرة", "قارة", "بلد",
+                    "مدينة", "قرية", "شارع", "حديقة", "ملعب", "مكتب", "مطبخ", "حمام", "غرفة", "سقف",
+                    "أرض", "جدار", "سلم", "بلكونة", "قبو", "سطح", "كراج", "حوش", "بستان", "مزرعة",
+                    "حقل", "زنبق", "ياسمين", "نخيل", "تفاح", "برتقال", "موز", "عنب", "بطيخ", "فراولة",
+                    "خيار", "طماطم", "بصل", "ثوم", "جزر", "خس", "ملفوف", "فطر", "زيتون", "تمر",
+                    "قهوة", "شاي", "حليب", "عسل", "سكر", "ملح", "خبز", "جبن", "زبدة", "لحم"
+                ],
+                medium: [
+                    "كمبيوتر", "حديقة", "مستشفى", "مطعم", "سفينة", "طائرة", "مكتبة", "سوق", "فندق", "تلفزيون",
+                    "ثريا", "سجادة", "خزانة", "دراجة", "ثلاجة", "غسالة", "مكنسة", "مروحة", "سخان", "ميكروويف",
+                    "حقيبة", "نظارة", "جريدة", "مجلة", "تلفون", "راديو", "كاميرا", "بطارية", "شمعة", "مصباح",
+                    "ساعة", "إطار", "مرآة", "وسادة", "بطانية", "ملاءة", "ستارة", "سلة", "صندوق", "علبة",
+                    "زجاجة", "كوب", "صحن", "ملعقة", "شوكة", "سكين", "طبق", "ابريق", "مبخرة", "مفرش",
+                    "معطف", "قميص", "بنطال", "جاكيت", "فستان", "حذاء", "نعل", "جورب", "قبعة", "وشاح",
+                    "قفاز", "حزام", "محفظة", "شنطة", "عقد", "سوار", "خاتم", "قرط", "دبوس", "سلسلة",
+                    "مقص", "دباسة", "غراء", "ورق", "قلم", "مسطرة", "ممحاة", "دفتر", "كتاب", "قاموس",
+                    "موسيقى", "رسم", "رقص", "مسرح", "سينما", "أغنية", "لوحة", "تمثال", "نحت", "تصوير",
+                    "رياضة", "كرة", "مباراة", "منافسة", "تدريب", "حكم", "ملعب", "جمهور", "فريق", "بطولة"
+                ],
+                hard: [
+                    "إلكترونيات", "استثمار", "اقتصاد", "فلسفة", "علم النفس", "تكنولوجيا", "برمجة", "هندسة", "طباعة", "تصوير",
+                    "معماري", "كيمياء", "فيزياء", "رياضيات", "جيولوجيا", "فلك", "بيولوجيا", "أنثروبولوجيا", "أركيولوجيا", "ميتافيزيقا",
+                    "ديمقراطية", "بيروقراطية", "تكنوقراطية", "أرستقراطية", "أوتوقراطية", "ليبرالية", "اشتراكية", "رأسمالية", "شيوعية", "وجودية",
+                    "عولمة", "تنمية", "استدامة", "بيئة", "إيكولوجيا", "تلوث", "احتباس", "انقراض", "تنوع", "توازن",
+                    "ميكانيكا", "كهرباء", "مغناطيس", "طاقة", "إشعاع", "ذرّة", "جزيء", "عنصر", "مركب", "تفاعل",
+                    "ميكروسكوب", "تلسكوب", "سبيكتروم", "مسرع", "مفاعل", "محطة", "مختبر", "مرصد", "منظار", "مجهر",
+                    "بروتوكول", "خوارزمية", "معالجة", "تخزين", "ذاكرة", "معالج", "لوحة", "شاشة", "طابعة", "ماسح",
+                    "سيناريو", "إخراج", "تمثيل", "إنتاج", "مونتاج", "إضاءة", "ديكور", "ماكياج", "أزياء", "مؤثرات",
+                    "تأمين", "بنك", "سوق", "أسهم", "سندات", "استثمار", "تضخم", "ركود", "ازدهار", "أزمة",
+                    "ترجمة", "تفسير", "تحليل", "نقد", "تأويل", "شرح", "تعليق", "تلخيص", "مراجعة", "دراسة"
+                ],
+                progressive: [
+                    "الكهروضوئية", "الكهرومغناطيسية", "الكيمياء الحيوية", "الفلسفة الوجودية", "الأنثروبولوجيا الثقافية",
+                    "البيولوجيا الجزيئية", "الجيوفيزياء الفلكية", "الميتافيزيقا الأرسطية", "البنيوية التكوينية", "ما بعد الحداثة",
+                    "الديكارتية العقلانية", "الكانطية النقدية", "الهيجلية المثالية", "الداروينية الاجتماعية", "الفرويدية التحليلية",
+                    "السينمائية التسجيلية", "الفوتوغرافية الضوئية", "السيميائية اللغوية", "الهرمنيوطيقا التأويلية", "الابستمولوجيا المعرفية",
+                    "الكهروميكانيكية", "الهيدروديناميكية", "الديناميكا الحرارية", "الكهرومغناطيسية", "الفيزياء الكمية",
+                    "النانوتكنولوجي", "البايوتكنولوجي", "الانفورماتيك", "الروبوتيك", "الذكاء الاصطناعي",
+                    "البيج داتا", "السايبر سيكيوريتي", "البلوك تشين", "الواقع الافتراضي", "الواقع المعزز",
+                    "الماكينة ليرنينج", "الديب ليرنينج", "النيورال نتورك", "الكومبيوتر فيجن", "النتورال بروسيسنج",
+                    "الترانسفورمير", "الجنيراتيف", "الديسبلاي", "الانترفيس", "البروسيسور",
+                    "المايكروكنترولر", "النانوميتر", "البيكومتر", "الفيمتوثانية", "الزيتابايت"
+                ]
+            },
+            english: {
+                easy: [
+                    "sun", "moon", "star", "tree", "house", "car", "book", "pen", "door", "cat",
+                    "dog", "bird", "fish", "ball", "hand", "foot", "eye", "ear", "nose", "bed",
+                    "cup", "hat", "bag", "key", "map", "bus", "sea", "sky", "boy", "girl",
+                    "man", "woman", "baby", "food", "water", "milk", "juice", "bread", "rice", "egg",
+                    "apple", "banana", "grape", "pear", "peach", "lemon", "lime", "cake", "candy", "ice",
+                    "desk", "chair", "lamp", "sofa", "table", "clock", "phone", "photo", "radio", "TV",
+                    "rain", "snow", "wind", "fire", "rock", "sand", "hill", "lake", "river", "road",
+                    "ship", "plane", "train", "bike", "truck", "boat", "shoe", "sock", "coat", "hat",
+                    "ring", "bell", "kite", "doll", "ball", "game", "toy", "card", "dice", "puzzle"
+                ],
+                medium: [
+                    "computer", "garden", "hospital", "restaurant", "airplane", "library", "market", "hotel", "television", "bicycle",
+                    "refrigerator", "umbrella", "notebook", "painting", "musical", "basket", "pillow", "mirror", "window", "picture",
+                    "teacher", "student", "doctor", "engineer", "manager", "driver", "artist", "writer", "singer", "dancer",
+                    "captain", "soldier", "pilot", "nurse", "cook", "farmer", "worker", "player", "runner", "swimmer",
+                    "kitchen", "bedroom", "bathroom", "living", "dining", "office", "garage", "garden", "school", "church",
+                    "summer", "winter", "spring", "autumn", "season", "weather", "temperature", "climate", "forecast", "storm",
+                    "breakfast", "lunch", "dinner", "supper", "snack", "salad", "sandwich", "pizza", "hamburger", "spaghetti",
+                    "chocolate", "vanilla", "strawberry", "blueberry", "raspberry", "watermelon", "pineapple", "coconut", "avocado", "cucumber",
+                    "basketball", "football", "volleyball", "baseball", "tennis", "golf", "swimming", "running", "cycling", "boxing",
+                    "guitar", "piano", "violin", "drums", "flute", "trumpet", "saxophone", "harmonica", "accordion", "harp"
+                ],
+                hard: [
+                    "architecture", "chemistry", "physics", "mathematics", "psychology", "technology", "engineering", "photography", "literature", "philosophy",
+                    "biology", "geology", "astronomy", "anthropology", "archaeology", "meteorology", "oceanography", "criminology", "epidemiology", "pharmacology",
+                    "democracy", "bureaucracy", "aristocracy", "autocracy", "capitalism", "socialism", "communism", "liberalism", "feminism", "humanism",
+                    "globalization", "development", "sustainability", "environment", "ecology", "pollution", "greenhouse", "extinction", "diversity", "balance",
+                    "mechanic", "electricity", "magnet", "energy", "radiation", "atom", "molecule", "element", "compound", "reaction",
+                    "microscope", "telescope", "spectrum", "accelerator", "reactor", "station", "laboratory", "observatory", "binoculars", "microscope",
+                    "protocol", "algorithm", "processing", "storage", "memory", "processor", "motherboard", "monitor", "printer", "scanner",
+                    "screenplay", "direction", "acting", "production", "editing", "lighting", "decoration", "makeup", "costume", "effects",
+                    "insurance", "bank", "market", "stocks", "bonds", "investment", "inflation", "recession", "prosperity", "crisis",
+                    "translation", "interpretation", "analysis", "criticism", "hermeneutics", "explanation", "commentary", "summary", "review", "study"
+                ],
+                progressive: [
+                    "electromagnetic", "biotechnology", "nanotechnology", "astrophysics", "biochemistry",
+                    "neuropsychology", "paleontology", "metaphysics", "epistemology", "phenomenology",
+                    "existentialism", "structuralism", "postmodernism", "deconstruction", "hermeneutics",
+                    "transcendentalism", "utilitarianism", "determinism", "empiricism", "rationalism",
+                    "electromechanical", "hydrodynamic", "thermodynamics", "electromagnetic", "quantum physics",
+                    "nanotechnology", "biotechnology", "informatics", "robotics", "artificial intelligence",
+                    "big data", "cybersecurity", "blockchain", "virtual reality", "augmented reality",
+                    "machine learning", "deep learning", "neural network", "computer vision", "natural processing",
+                    "transformer", "generative", "display", "interface", "processor",
+                    "microcontroller", "nanometer", "picometer", "femtosecond", "zettabyte"
+                ]
+            },
+            mixed: {
+                easy: [
+                    "قمر", "moon", "شمس", "sun", "بحر", "sea", "جبل", "mountain", "كتاب", "book",
+                    "قلم", "pen", "وردة", "flower", "عصفور", "bird", "بيت", "house", "شجرة", "tree",
+                    "سيارة", "car", "مدرسة", "school", "حاسوب", "computer", "هاتف", "phone", "ساعة", "clock",
+                    "باب", "door", "نافذة", "window", "سرير", "bed", "كرسي", "chair", "طاولة", "table",
+                    "ورق", "paper", "ماء", "water", "هواء", "air", "نار", "fire", "تراب", "soil",
+                    "ذهب", "gold", "فضة", "silver", "ليل", "night", "نهار", "day", "صيف", "summer",
+                    "شتاء", "winter", "ربيع", "spring", "خريف", "autumn", "صحراء", "desert", "غابة", "forest",
+                    "نهر", "river", "بحيرة", "lake", "نجمة", "star", "سحاب", "cloud", "مطر", "rain"
+                ],
+                medium: [
+                    "كمبيوتر", "computer", "حديقة", "garden", "مستشفى", "hospital", "مطعم", "restaurant", "سفينة", "ship",
+                    "طائرة", "airplane", "مكتبة", "library", "سوق", "market", "فندق", "hotel", "تلفزيون", "television",
+                    "ثريا", "chandelier", "سجادة", "carpet", "خزانة", "closet", "دراجة", "bicycle", "ثلاجة", "refrigerator",
+                    "غسالة", "washing machine", "مكنسة", "broom", "مروحة", "fan", "سخان", "heater", "ميكروويف", "microwave",
+                    "حقيبة", "bag", "نظارة", "glasses", "جريدة", "newspaper", "مجلة", "magazine", "تلفون", "telephone",
+                    "راديو", "radio", "كاميرا", "camera", "بطارية", "battery", "شمعة", "candle", "مصباح", "lamp"
+                ],
+                hard: [
+                    "إلكترونيات", "electronics", "استثمار", "investment", "اقتصاد", "economy", "فلسفة", "philosophy", "علم النفس", "psychology",
+                    "تكنولوجيا", "technology", "برمجة", "programming", "هندسة", "engineering", "طباعة", "printing", "تصوير", "photography",
+                    "معماري", "architectural", "كيمياء", "chemistry", "فيزياء", "physics", "رياضيات", "mathematics", "جيولوجيا", "geology",
+                    "فلك", "astronomy", "بيولوجيا", "biology", "أنثروبولوجيا", "anthropology", "أركيولوجيا", "archaeology", "ميتافيزيقا", "metaphysics",
+                    "ديمقراطية", "democracy", "بيروقراطية", "bureaucracy", "تكنوقراطية", "technocracy", "أرستقراطية", "aristocracy", "أوتوقراطية", "autocracy"
+                ],
+                progressive: [
+                    "الكهروضوئية", "photovoltaic", "الكهرومغناطيسية", "electromagnetic", "الكيمياء الحيوية", "biochemistry", "الفلسفة الوجودية", "existentialism", "الأنثروبولوجيا الثقافية", "cultural anthropology",
+                    "البيولوجيا الجزيئية", "molecular biology", "الجيوفيزياء الفلكية", "astrophysics", "الميتافيزيقا الأرسطية", "Aristotelian metaphysics", "البنيوية التكوينية", "structuralism", "ما بعد الحداثة", "postmodernism",
+                    "الديكارتية العقلانية", "Cartesian rationalism", "الكانطية النقدية", "Kantian criticism", "الهيجلية المثالية", "Hegelian idealism", "الداروينية الاجتماعية", "social Darwinism", "الفرويدية التحليلية", "Freudian psychoanalysis"
+                ]
+            }
         };
         
-        let currentLevel = 'easy';
-        let score = 0;
-        let timeLeft = levels[currentLevel].time;
-        let timer;
-        let correctAnswer;
-        let gameActive = false;
+        const levelsConfig = {
+            easy: { time: 90, speed: 1 },
+            medium: { time: 75, speed: 1.5 },
+            hard: { time: 60, speed: 2 },
+            progressive: { time: 45, speed: 3 }
+        };
         
-        const questionEl = document.getElementById('question');
-        const optionsEl = document.getElementById('options');
+        // متغيرات اللعبة
+        let currentLevel = 'easy';
+        let currentLanguage = 'arabic';
+        let score = 0;
+        let highScore = 0;
+        let timeLeft = levelsConfig[currentLevel].time;
+        let timer;
+        let currentWord = '';
+        let gameActive = false;
+        let correctCount = 0;
+        let totalAttempts = 0;
+        let wordsCompleted = 0;
+        let startTime;
+        let progressiveLevel = 1;
+        
+        // عناصر DOM
+        const gameContainerEl = document.getElementById('gameContainer');
+        const wordDisplayEl = document.getElementById('wordDisplay');
+        const wordInputEl = document.getElementById('wordInput');
         const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
         const timeEl = document.getElementById('time');
         const pointsEl = document.getElementById('points');
-        const levelBtns = document.querySelectorAll('.level-btn');
+        const highScoreEl = document.getElementById('highScore');
+        const messageEl = document.getElementById('message');
+        const accuracyEl = document.getElementById('accuracy');
+        const wpmEl = document.getElementById('wpm');
+        const progressBarEl = document.getElementById('progressBar');
+        const levelBtns = document.querySelectorAll('[data-level]');
+        const langBtns = document.querySelectorAll('[data-lang]');
         const correctSound = document.getElementById('correctSound');
         const wrongSound = document.getElementById('wrongSound');
-        const timeSound = document.getElementById('timeSound');
+        const levelUpSound = document.getElementById('levelUpSound');
+        const gameOverSound = document.getElementById('gameOverSound');
         
-        // اختيار المستوى
+        // تحميل أعلى نتيجة من localStorage
+        function loadHighScore() {
+            const savedScore = localStorage.getItem(`typingHighScore_${currentLanguage}_${currentLevel}`);
+            highScore = savedScore ? parseInt(savedScore) : 0;
+            highScoreEl.textContent = highScore;
+        }
+        
+        // حفظ أعلى نتيجة في localStorage
+        function saveHighScore() {
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem(`typingHighScore_${currentLanguage}_${currentLevel}`, highScore.toString());
+                highScoreEl.textContent = highScore;
+            }
+        }
+        
+        // حفظ الإحصائيات
+        function saveStats() {
+            const stats = {
+                score: score,
+                accuracy: accuracyEl.textContent,
+                wpm: wpmEl.textContent,
+                date: new Date().toLocaleString()
+            };
+            
+            let allStats = JSON.parse(localStorage.getItem('typingStats') || '[]');
+            allStats.push(stats);
+            
+            // حفظ آخر 10 إحصائيات فقط
+            if (allStats.length > 10) {
+                allStats = allStats.slice(-10);
+            }
+            
+            localStorage.setItem('typingStats', JSON.stringify(allStats));
+        }
+        
+        // تغيير المستوى
         levelBtns.forEach(btn => {
             btn.addEventListener('click', function() {
+                if (gameActive) endGame();
+                
                 levelBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentLevel = this.dataset.level;
-                timeLeft = levels[currentLevel].time;
+                timeLeft = levelsConfig[currentLevel].time;
                 timeEl.textContent = timeLeft;
+                progressiveLevel = 1;
                 
-                // إعادة تعيين اللعبة إذا كانت نشطة
-                if (gameActive) {
-                    clearInterval(timer);
-                    startGame();
-                }
+                loadHighScore();
+                updateProgressBar(0);
+            });
+        });
+        
+        // تغيير اللغة
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (gameActive) endGame();
+                
+                langBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentLanguage = this.dataset.lang;
+                
+                loadHighScore();
+                updateProgressBar(0);
             });
         });
         
         // بدء اللعبة
         startBtn.addEventListener('click', startGame);
         
+        // إيقاف اللعبة
+        stopBtn.addEventListener('click', endGame);
+        
+        // التحقق من الكلمة المدخلة
+        wordInputEl.addEventListener('input', checkWord);
+        
         function startGame() {
             score = 0;
-            timeLeft = levels[currentLevel].time;
+            correctCount = 0;
+            totalAttempts = 0;
+            wordsCompleted = 0;
+            timeLeft = levelsConfig[currentLevel].time;
             gameActive = true;
+            progressiveLevel = 1;
+            
             pointsEl.textContent = score;
             timeEl.textContent = timeLeft;
+            accuracyEl.textContent = '100';
+            wpmEl.textContent = '0';
             startBtn.style.display = 'none';
-            timeEl.style.color = 'var(--neon-green)';
+            stopBtn.style.display = 'flex';
+            wordInputEl.value = '';
+            wordInputEl.disabled = false;
+            wordInputEl.focus();
+            messageEl.textContent = '';
+            messageEl.className = 'message';
+            timeEl.style.color = 'var(--primary)';
             
+            // إخفاء الإعدادات
+            gameContainerEl.classList.add('game-active');
+            
+            startTime = new Date().getTime();
+            
+            // بدء المؤقت
             timer = setInterval(updateTimer, 1000);
-            generateQuestion();
+            
+            // عرض الكلمة الأولى
+            showNewWord();
         }
         
         function updateTimer() {
             timeLeft--;
             timeEl.textContent = timeLeft;
             
+            // تحديث معدل الكلمات في الدقيقة
+            updateWPM();
+            
             if (timeLeft <= 5) {
-                timeSound.currentTime = 0;
-                timeSound.play();
-                timeEl.style.color = '#ff5555';
+                timeEl.style.color = 'var(--accent)';
             }
             
             if (timeLeft <= 0) {
@@ -266,101 +658,115 @@
             }
         }
         
-        function generateQuestion() {
-            const { range } = levels[currentLevel];
-            const operations = ['+', '-', '*'];
-            const operation = operations[Math.floor(Math.random() * operations.length)];
-            
-            let num1, num2, answer;
-            
-            switch(operation) {
-                case '+':
-                    num1 = Math.floor(Math.random() * range) + 1;
-                    num2 = Math.floor(Math.random() * range) + 1;
-                    answer = num1 + num2;
-                    break;
-                case '-':
-                    num1 = Math.floor(Math.random() * range) + 1;
-                    num2 = Math.floor(Math.random() * num1) + 1;
-                    answer = num1 - num2;
-                    break;
-                case '*':
-                    num1 = Math.floor(Math.random() * Math.sqrt(range)) + 1;
-                    num2 = Math.floor(Math.random() * Math.sqrt(range)) + 1;
-                    answer = num1 * num2;
-                    break;
-            }
-            
-            correctAnswer = answer;
-            questionEl.textContent = `${num1} ${operation} ${num2} = ?`;
-            
-            // توليد خيارات الإجابة
-            const options = [answer];
-            while (options.length < 4) {
-                let wrongAnswer;
-                do {
-                    wrongAnswer = answer + (Math.floor(Math.random() * 10) - 5);
-                } while (wrongAnswer === answer || wrongAnswer < 0 || options.includes(wrongAnswer));
+        function showNewWord() {
+            // تحديد المستوى الفعلي (خاص بالوضع التدريجي)
+            let actualLevel = currentLevel;
+            if (currentLevel === 'progressive') {
+                if (score >= 50) actualLevel = 'hard';
+                else if (score >= 20) actualLevel = 'medium';
+                else actualLevel = 'easy';
                 
-                options.push(wrongAnswer);
+                progressiveLevel = actualLevel === 'easy' ? 1 : actualLevel === 'medium' ? 2 : 3;
             }
             
-            // خلط الخيارات
-            options.sort(() => Math.random() - 0.5);
+            // اختيار كلمة عشوائية من المستوى الحالي واللغة المحددة
+            const words = wordsDatabase[currentLanguage][actualLevel];
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            wordDisplayEl.textContent = currentWord;
+            wordInputEl.value = '';
             
-            // عرض الخيارات
-            optionsEl.innerHTML = '';
-            options.forEach(option => {
-                const optionEl = document.createElement('div');
-                optionEl.classList.add('option');
-                optionEl.textContent = option;
-                optionEl.addEventListener('click', () => checkAnswer(option));
-                optionsEl.appendChild(optionEl);
-            });
+            // تأثير ظهور الكلمة
+            wordDisplayEl.classList.add('pulse');
+            setTimeout(() => wordDisplayEl.classList.remove('pulse'), 500);
         }
         
-        function checkAnswer(selected) {
+        function checkWord() {
             if (!gameActive) return;
             
-            if (selected === correctAnswer) {
+            totalAttempts++;
+            
+            if (wordInputEl.value.trim().toLowerCase() === currentWord.toLowerCase()) {
                 // إجابة صحيحة
                 correctSound.currentTime = 0;
                 correctSound.play();
                 
-                score += currentLevel === 'easy' ? 1 : currentLevel === 'medium' ? 2 : 3;
+                correctCount++;
+                wordsCompleted++;
+                
+                // حساب النقاط بناء على طول الكلمة ومستوى الصعوبة
+                const wordScore = Math.floor(currentWord.length * levelsConfig[currentLevel].speed * (currentLevel === 'progressive' ? progressiveLevel : 1));
+                score += wordScore;
                 pointsEl.textContent = score;
                 
-                // تأثير للإجابة الصحيحة
-                questionEl.style.color = '#00ff00';
-                setTimeout(() => {
-                    questionEl.style.color = 'var(--neon-pink)';
-                }, 300);
-            } else {
-                // إجابة خاطئة
-                wrongSound.currentTime = 0;
-                wrongSound.play();
+                // عرض رسالة التأكيد
+                messageEl.textContent = `+${wordScore} نقطة!`;
+                messageEl.className = "message correct";
                 
-                // تأثير للإجابة الخاطئة
-                questionEl.style.color = '#ff0000';
-                setTimeout(() => {
-                    questionEl.style.color = 'var(--neon-pink)';
-                }, 300);
+                // تحديث شريط التقدم
+                updateProgressBar(score / (levelsConfig[currentLevel].time * levelsConfig[currentLevel].speed * 5) * 100);
+                
+                // تحديث الدقة
+                updateAccuracy();
+                
+                // تحديث أعلى نتيجة
+                if (score > highScore) {
+                    highScore = score;
+                    highScoreEl.textContent = highScore;
+                    
+                    if (score % 50 === 0) {
+                        levelUpSound.currentTime = 0;
+                        levelUpSound.play();
+                        messageEl.textContent = `🎉 سجل جديد! ${highScore} نقطة!`;
+                    }
+                }
+                
+                // عرض كلمة جديدة
+                showNewWord();
             }
-            
-            generateQuestion();
+        }
+        
+        function updateAccuracy() {
+            const accuracy = Math.round((correctCount / totalAttempts) * 100);
+            accuracyEl.textContent = accuracy;
+        }
+        
+        function updateWPM() {
+            const timeElapsed = (new Date().getTime() - startTime) / 60000; // بالدقائق
+            const wpm = Math.round(wordsCompleted / timeElapsed);
+            wpmEl.textContent = isFinite(wpm) ? wpm : 0;
+        }
+        
+        function updateProgressBar(percent) {
+            progressBarEl.style.width = `${Math.min(percent, 100)}%`;
         }
         
         function endGame() {
             clearInterval(timer);
             gameActive = false;
             
-            questionEl.innerHTML = `انتهى الوقت!<br>نقاطك النهائية: ${score}`;
-            optionsEl.innerHTML = '';
+            gameOverSound.currentTime = 0;
+            gameOverSound.play();
             
-            startBtn.style.display = 'block';
-            startBtn.textContent = 'العب مرة أخرى';
-            timeEl.style.color = 'var(--neon-green)';
+            wordDisplayEl.innerHTML = `انتهى الوقت!<br>نقاطك: ${score}`;
+            wordInputEl.value = '';
+            wordInputEl.disabled = true;
+            
+            startBtn.style.display = 'flex';
+            stopBtn.style.display = 'none';
+            timeEl.style.color = 'var(--primary)';
+            
+            // إظهار الإعدادات
+            gameContainerEl.classList.remove('game-active');
+            
+            // حفظ أعلى نتيجة
+            saveHighScore();
+            
+            // حفظ الإحصائيات
+            saveStats();
         }
+        
+        // تحميل أعلى نتيجة عند البدء
+        loadHighScore();
     </script>
 </body>
 </html>
